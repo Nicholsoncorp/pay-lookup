@@ -318,7 +318,7 @@
   </div>
   <div class="refresh-time">
     <strong>Data Current As Of</strong>
-    April 08, 2026 at 11:24 AM
+    April 08, 2026 at 11:29 AM
   </div>
 </header>
 
@@ -444,9 +444,29 @@ function lookup() {
   const records = PAY_RECORDS[key];
 
   if (!records || records.length === 0) {
-    resultsEl.innerHTML = `<div class="no-results"><div class="icon">📭</div><p>No pay records found for <strong>${selectedEmp.name}</strong> for the week ending <strong>${weekLabel}</strong>.</p></div>`;
-    return;
-  }
+  const initials = selectedEmp.name.split(',').map(p => p.trim()[0] || '').join('');
+
+  resultsEl.innerHTML = `
+    <div class="employee-header">
+      <div class="emp-avatar">${initials}</div>
+      <div class="emp-info">
+        <h3>${selectedEmp.name}</h3>
+        <p>ID: ${selectedEmp.id}</p>
+        <div class="emp-meta">Last Day Worked: <strong>${selectedEmp.last_day_worked || '—'}</strong></div>
+      </div>
+      <div class="week-badge">
+        <span>Week Ending</span>
+        <strong>${weekLabel}</strong>
+      </div>
+    </div>
+
+    <div class="no-results">
+      <div class="icon">📭</div>
+      <p>No pay records found for <strong>${selectedEmp.name}</strong> for the week ending <strong>${weekLabel}</strong>.</p>
+    </div>
+  `;
+  return;
+}
 
   const totalReg = records.reduce((s, r) => s + r.regular_hours, 0);
   const totalOT = records.reduce((s, r) => s + r.overtime_hours, 0);
